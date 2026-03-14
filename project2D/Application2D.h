@@ -2,8 +2,10 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
+#include "ParticleSystem.h"
 
-class Application2D : public aie::Application {
+class Application2D : public aie::Application
+{
 public:
 
 	Application2D();
@@ -17,10 +19,12 @@ public:
 
 protected:
 
-	aie::Renderer2D*	m_2dRenderer;
-	aie::Texture*		m_texture;
-	aie::Texture*		m_shipTexture;
-	aie::Font*			m_font;
+	aie::Renderer2D* m_2dRenderer;
+	aie::Texture* m_texture;
+	aie::Texture* m_shipTexture;
+	aie::Texture* m_particleTexture;
+	aie::Font* m_font;
+	ParticleSystem* m_particleSystem;
 
 	float m_timer;
 };
