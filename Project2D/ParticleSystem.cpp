@@ -45,15 +45,17 @@ void ParticleSystem::Update(float deltaTime)
 	int updatecount = 0;
 	for (auto particle : mParticles)
 	{
-		particle->Update(deltaTime,
-			{ 0,0,0,-0.01f * deltaTime },
-			{ 0,0 },
-			{ deltaTime * 10, deltaTime * 10 },
-			0.001f);
+		particle->Update(deltaTime, { 0,0,0,-0.01f * deltaTime }, { 0,0 },{ deltaTime * 10, deltaTime * 10 },0.001f);
 		updatecount++;
+		// for the momory heaps version we can do free particles here
+		if (!particle->isActive())
+		{
+			mParticles.erase(particle);
+		}
 
 	}
 
+	/*
 	// check if any particles need deleting
 	for (auto it = mParticles.begin(); it < mParticles.end(); it++)
 	{
@@ -63,6 +65,7 @@ void ParticleSystem::Update(float deltaTime)
 			it = mParticles.erase(it);
 		}
 	}
+	*/
 
 	auto end = std::chrono::high_resolution_clock::now();
 	auto duration = end - start;

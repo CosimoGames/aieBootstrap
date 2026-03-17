@@ -5,7 +5,8 @@
 #include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
-#include "DynamicStore.h"
+#include "MemoryPool.h"
+//#include "DynamicStore.h"
 
 using namespace glm;
 using namespace std;
@@ -20,6 +21,12 @@ class ParticleSprite
 	float mRotation;
 
 public:
+	// empty constructor to fix error on line 45 in MemoryPool.h
+	ParticleSprite()
+	{
+
+	}
+
 	ParticleSprite(
 		vec2 Position,
 		vec2 Velocity,
@@ -61,8 +68,9 @@ class ParticleSystem
 	int mNumberUpdates;
 	double mAverage;
 	aie::Texture* mTexture;
+	MemoryPool<ParticleSprite,1000> mParticles;
 	//vector <ParticleSprite*> mParticles;
-	DynamicStore<ParticleSprite> mParticles;
+	//DynamicStore<ParticleSprite> mParticles;
 
 	void SpawnParticle();
 public:
