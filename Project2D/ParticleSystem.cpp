@@ -1,6 +1,9 @@
 #include "ParticleSystem.h"
 #include <cmath>
+#include <chrono>
+#include <iostream>
 
+using namespace std;
 
 float M_PI = 3.14159265358979323846f;
 
@@ -12,18 +15,23 @@ void ParticleSystem::SpawnParticle()
 	float speed = mStartingSpeed * (1.0f + (std::rand() / (float)RAND_MAX)) * 0.5f;
 	vec2 startVelocity(sin(angle) * speed, cos(angle) * speed);
 
-	ParticleSprite* pNewParticle = new ParticleSprite(mSpawnPosition + (startVelocity * 0.1f),
+	ParticleSprite newParticle(mSpawnPosition + (startVelocity * 0.1f),
 		startVelocity, startSize,
 		mStartingColour,
 		mParticleDuration,
 		angle);
 
-	return this->mParticles.push_back(pNewParticle);
+	mParticles.addItem(newParticle);
 
 }
 
 void ParticleSystem::Update(float deltaTime)
 {
+	mNumberUpdates++;
+	auto start = std::chrono::high_resolution_clock::now();
+
+	
+	
 	// check if it's thime to spawn another particle
 	mSpawnTimer -= deltaTime;
 	while (mSpawnTimer < 0)
@@ -34,6 +42,7 @@ void ParticleSystem::Update(float deltaTime)
 	}
 
 	// update all the particles
+	int updatecount = 0;
 	for (auto particle : mParticles)
 	{
 		particle->Update(deltaTime,
@@ -41,6 +50,8 @@ void ParticleSystem::Update(float deltaTime)
 			{ 0,0 },
 			{ deltaTime * 10, deltaTime * 10 },
 			0.001f);
+		updatecount++;
+
 	}
 
 	// check if any particles need deleting
@@ -48,10 +59,15 @@ void ParticleSystem::Update(float deltaTime)
 	{
 		if (!(*it)->isActive())
 		{
-			delete (*it);
+			//delete (*it);
 			it = mParticles.erase(it);
 		}
 	}
+
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = end - start;
+	mAverage = (mAverage * (mNumberUpdates - 1) + duration.count()) / (double)mNumberUpdates;
+	cout << "Number Particles: " << updatecount << ", Update took: " << mAverage << "\n";
 }
 
 void ParticleSystem::Draw(aie::Renderer2D* renderer)

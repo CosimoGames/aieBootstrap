@@ -5,6 +5,7 @@
 #include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
+#include "DynamicStore.h"
 
 using namespace glm;
 using namespace std;
@@ -57,8 +58,11 @@ class ParticleSystem
 	float mParticleDuration;
 	float mSpawnRate;
 	float mSpawnTimer;
+	int mNumberUpdates;
+	double mAverage;
 	aie::Texture* mTexture;
-	vector <ParticleSprite*> mParticles;
+	//vector <ParticleSprite*> mParticles;
+	DynamicStore<ParticleSprite> mParticles;
 
 	void SpawnParticle();
 public:
